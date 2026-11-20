@@ -1,0 +1,13 @@
+{
+  "name": "chibi-remote-storage-slides",
+  "private": true,
+  "scripts": {
+    "start": "marp -s .",
+    "build": "marp -I . -o dist",
+    "build:pdf": "marp -I . -o dist --pdf",
+    "build:pptx": "marp -I . -o dist --pptx"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.5.1"
+  }
+}
