@@ -21,7 +21,17 @@ style: |
     text-align: center;
   }
   section.api {
-    font-size: 22px;
+    font-size: 24px;
+  }
+  section.api h3 {
+    margin: 0 0 0.65em;
+    font-size: 27px;
+  }
+  section.api p {
+    margin: 0.65em 0 0.25em;
+  }
+  section.api ul {
+    margin: 0;
   }
 ---
 
@@ -67,27 +77,88 @@ style: |
 
 <!-- _class: api -->
 
-# API
+# API（open / close）
 
 <div class="columns">
 <div>
 
-### `open(site, path, mode)` → file
-- site: ファイルシステムの URI
-- path: site 内のパス（なければ生成）
-- mode: read only / write only / read-write
+### `open(site, path, mode)`
 
-### `close(file, mode)`
-- mode: アップロード / 破棄
-- → Success / Not Found / Failed (Conflict)
+**用途**\
+ファイルをキャッシュに読み込む。\
+指定先にファイルがなければ作成する。
+
+**引数**
+
+- `site` — ファイルシステムの URI
+- `path` — `site` 内のファイルパス
+- `mode` — アクセスモード\
+  `read only` / `write only` / `read/write`
+
+**戻り値**\
+`file` — キャッシュ内のファイルポインタ
 
 </div>
 <div>
 
+### `close(file, mode)`
+
+**用途**\
+変更をアップロードまたは破棄する。\
+ファイルをキャッシュから削除する。
+
+**引数**
+
+- `file` — キャッシュ内のファイルポインタ
+- `mode` — 変更をアップロード／破棄
+
+**戻り値**\
+`Success` / `Not Found` / `Failed (Conflict)`
+
+</div>
+</div>
+
+---
+
+<!-- _class: api -->
+
+# API（read / write）
+
+<div class="columns">
+<div>
+
 ### `read(file, offset, length, buf)`
+
+**用途**\
+キャッシュ上のファイルから読み取る。
+
+**引数**
+
+- `file` — キャッシュ内のファイルポインタ
+- `offset` — 読み取りの開始位置
+- `length` — 読み取る長さ
+- `buf` — 読み取り先の文字列バッファ
+
+**戻り値**\
+`Success` / `Not Found` / `Failed`
+
+</div>
+<div>
+
 ### `write(file, offset, length, buf)`
-- キャッシュ上のファイルを読み書き
-- → Success / Not Found / Failed
+
+**用途**\
+キャッシュ上のファイルに書き込む。
+
+**引数**
+
+- `file` — キャッシュ内のファイルポインタ
+- `offset` — 書き込みの開始位置
+- `length` — 書き込む長さ
+- `buf` — 書き込み元の文字列バッファ
+
+**戻り値**\
+`Success` / `Not Found` / `Failed`
 
 </div>
 </div>
