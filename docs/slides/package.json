@@ -2,12 +2,15 @@
   "name": "chibi-remote-storage-slides",
   "private": true,
   "scripts": {
+    "diagrams": "node build-diagrams.mjs",
     "start": "marp -s .",
     "build": "marp -I . -o dist",
-    "build:pdf": "marp -I . -o dist --pdf",
-    "build:pptx": "marp -I . -o dist --pptx"
+    "postbuild": "node -e \"const fs=require('fs');for(const d of fs.readdirSync('.'))if(fs.existsSync(d+'/images'))fs.cpSync(d+'/images','dist/'+d+'/images',{recursive:true})\"",
+    "build:pdf": "marp -I . -o dist --pdf --allow-local-files",
+    "build:pptx": "marp -I . -o dist --pptx --allow-local-files"
   },
   "devDependencies": {
-    "@marp-team/marp-cli": "^4.5.1"
+    "@marp-team/marp-cli": "^4.5.1",
+    "@mermaid-js/mermaid-cli": "^12.2.0"
   }
 }

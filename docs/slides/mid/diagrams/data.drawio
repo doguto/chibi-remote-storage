@@ -1,0 +1,48 @@
+<mxfile host="65bd71144e">
+    <diagram id="data-management" name="データ管理">
+        <mxGraphModel dx="1027" dy="1072" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="client" parent="1" style="rounded=1;arcSize=8;fillColor=#f4f7fb;strokeColor=#a9b9ce;strokeWidth=2;" value="" vertex="1">
+                    <mxGeometry height="350" width="220" x="20" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="client-heading" parent="client" style="text;html=0;align=center;verticalAlign=middle;fontSize=27;fontStyle=1;fontColor=#17263a;" value="クライアント" vertex="1">
+                    <mxGeometry height="44" width="200" x="10" y="82" as="geometry"/>
+                </mxCell>
+                <mxCell id="client-data" parent="client" style="text;html=0;align=left;verticalAlign=middle;fontSize=21;fontColor=#33475f;" value="- キャッシュ&#xa;- open 時のバージョン" vertex="1">
+                    <mxGeometry height="72" width="210" x="5" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="server" parent="1" style="rounded=1;arcSize=8;fillColor=#f4f7fb;strokeColor=#a9b9ce;strokeWidth=2;" value="" vertex="1">
+                    <mxGeometry height="350" width="220" x="800" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="server-heading" parent="server" style="text;html=0;align=center;verticalAlign=middle;fontSize=27;fontStyle=1;fontColor=#17263a;" value="サーバ" vertex="1">
+                    <mxGeometry height="44" width="200" x="10" y="82" as="geometry"/>
+                </mxCell>
+                <mxCell id="server-data" parent="server" style="text;html=0;align=left;verticalAlign=middle;fontSize=21;fontColor=#33475f;" value="- 正本&#xa;- 最新バージョン" vertex="1">
+                    <mxGeometry height="72" width="210" x="5" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="open-request" edge="1" parent="1" source="client" style="html=0;edgeStyle=none;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#576980;dashed=1;dashPattern=5 4;fontSize=22;fontColor=#26384e;exitX=1;exitY=0.2;entryX=0;entryY=0.2;" target="server" value="open の要求（パス・モード）">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-19" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="open-response" edge="1" parent="1" source="server" style="html=0;edgeStyle=none;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#28578a;fontSize=22;fontColor=#214c7a;exitX=0;exitY=0.41;entryX=1;entryY=0.41;" target="client" value="open の応答（内容・バージョン）">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-19" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="close-upload" edge="1" parent="1" source="client" style="html=0;edgeStyle=none;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#28578a;fontSize=22;fontColor=#214c7a;exitX=1;exitY=0.68;entryX=0;entryY=0.68;" target="server" value="close のアップロード（変更・取得時のバージョン）">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-19" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="close-response" edge="1" parent="1" source="server" style="html=0;edgeStyle=none;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#576980;dashed=1;dashPattern=5 4;fontSize=22;fontColor=#26384e;exitX=0;exitY=0.89;entryX=1;entryY=0.89;" target="client" value="close の応答（結果）">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-19" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

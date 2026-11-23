@@ -3,8 +3,7 @@ marp: true
 theme: default
 size: 16:9
 paginate: true
-header: chibi-remote-storage 中間報告
-footer: 2026-11-XX / 発表者名
+header: 分散ファイルシステム 設計 中間報告
 style: |
   section {
     font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
@@ -13,14 +12,26 @@ style: |
   section.lead h1 {
     font-size: 56px;
   }
-  .todo {
-    color: #d33;
-    font-weight: bold;
-  }
   .columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5em;
+  }
+  section p:has(> img) {
+    text-align: center;
+  }
+  section.api {
+    font-size: 24px;
+  }
+  section.api h3 {
+    margin: 0 0 0.65em;
+    font-size: 27px;
+  }
+  section.api p {
+    margin: 0.65em 0 0.25em;
+  }
+  section.api ul {
+    margin: 0;
   }
 ---
 
@@ -28,126 +39,129 @@ style: |
 <!-- _paginate: false -->
 <!-- _header: "" -->
 
-# chibi-remote-storage
+# 分散ファイルシステム 設計
 ## 中間報告
 
-発表者名
-2026-11-XX
+東儀 隆弘
+詹 栄盛
 
 ---
 
-# 目次
+# ファイル共有: Session semantics
 
-1. 背景・目的
-2. 目標とスコープ
-3. システム構成
-4. 進捗状況
-5. デモ / 成果物
-6. 課題と対策
-7. 今後の予定
-8. まとめ
+- `open` でファイルをキャッシュにコピー
+- 編集はキャッシュ上で行う
+- `close` まで変更をアップロードしない
 
 ---
 
-# 背景・目的
+# 変更許可: バージョン比較
 
-<span class="todo">TODO: 背景を記入</span>
-
-- 現状の課題
-  - 例: 手元の小さなデータを手軽にリモートへ置きたい
-- 既存手段の不満点
-  - 例: 既存クラウドストレージは重い / 設定が面倒
-
-**目的**: <span class="todo">TODO: 1 行で</span>
+- `open` で内容とバージョンを取得
+- `close` で取得時のバージョンを送り返す
+- サーバで比較し、不一致なら `Failed (Conflict)`
 
 ---
 
-# 目標とスコープ
+# 流れ
+
+![h:480](./images/flow.svg)
+
+---
+
+# データ管理
+
+![w:1000](./images/data.svg)
+
+---
+
+<!-- _class: api -->
+
+# API（open / close）
 
 <div class="columns">
 <div>
 
-### やること
+### `open(site, path, mode)`
 
-- <span class="todo">TODO</span>
-- 例: ファイルのアップロード / ダウンロード
-- 例: 最小限の認証
+**用途**\
+ファイルをキャッシュに読み込む。\
+指定先にファイルがなければ作成する。
+
+**引数**
+
+- `site` — ファイルシステムの URI
+- `path` — `site` 内のファイルパス
+- `mode` — アクセスモード\
+  `read only` / `write only` / `read/write`
+
+**戻り値**\
+`file` — キャッシュ内のファイルポインタ
 
 </div>
 <div>
 
-### やらないこと
+### `close(file, mode)`
 
-- <span class="todo">TODO</span>
-- 例: 大容量ファイル対応
-- 例: 複数ユーザー間の共有
+**用途**\
+変更をアップロードまたは破棄する。\
+ファイルをキャッシュから削除する。
+
+**引数**
+
+- `file` — キャッシュ内のファイルポインタ
+- `mode` — 変更をアップロード／破棄
+
+**戻り値**\
+`Success` / `Not Found` / `Failed (Conflict)`
 
 </div>
 </div>
 
 ---
 
-# システム構成
+<!-- _class: api -->
 
-<span class="todo">TODO: 構成図を挿入（`![w:900](./images/architecture.png)`）</span>
+# API（read / write）
 
-| レイヤ | 技術 |
-| --- | --- |
-| クライアント | <span class="todo">TODO</span> |
-| サーバ | <span class="todo">TODO</span> |
-| ストレージ | <span class="todo">TODO</span> |
+<div class="columns">
+<div>
 
----
+### `read(file, offset, length, buf)`
 
-# 進捗状況
+**用途**\
+キャッシュ上のファイルから読み取る。
 
-| 項目 | 状態 | 備考 |
-| --- | :---: | --- |
-| 要件定義 | ✅ 完了 | |
-| 基本設計 | 🔄 進行中 | <span class="todo">TODO</span> |
-| 実装 | ⬜ 未着手 | |
-| テスト | ⬜ 未着手 | |
+**引数**
 
-進捗率: <span class="todo">XX%</span>（計画比 <span class="todo">±X 週</span>）
+- `file` — キャッシュ内のファイルポインタ
+- `offset` — 読み取りの開始位置
+- `length` — 読み取る長さ
+- `buf` — 読み取り先の文字列バッファ
 
----
+**戻り値**\
+`Success` / `Not Found` / `Failed`
 
-# デモ / 成果物
+</div>
+<div>
 
-<span class="todo">TODO: スクリーンショット or デモ動画</span>
+### `write(file, offset, length, buf)`
 
-- できるようになったこと
-  - <span class="todo">TODO</span>
-- 計測結果（あれば）
-  - <span class="todo">TODO</span>
+**用途**\
+キャッシュ上のファイルに書き込む。
 
----
+**引数**
 
-# 課題と対策
+- `file` — キャッシュ内のファイルポインタ
+- `offset` — 書き込みの開始位置
+- `length` — 書き込む長さ
+- `buf` — 書き込み元の文字列バッファ
 
-| 課題 | 影響 | 対策 |
-| --- | --- | --- |
-| <span class="todo">TODO</span> | | |
-| <span class="todo">TODO</span> | | |
+**戻り値**\
+`Success` / `Not Found` / `Failed`
 
----
-
-# 今後の予定
-
-| 時期 | 内容 |
-| --- | --- |
-| 〜 12 月上旬 | <span class="todo">TODO</span> |
-| 〜 12 月下旬 | <span class="todo">TODO</span> |
-| 〜 1 月 | <span class="todo">TODO</span> |
-| 最終報告 | <span class="todo">YYYY-MM-DD</span> |
-
----
-
-# まとめ
-
-- 目的: <span class="todo">TODO</span>
-- 現状: <span class="todo">TODO</span>
-- 次のステップ: <span class="todo">TODO</span>
+</div>
+</div>
 
 ---
 

@@ -1,0 +1,23 @@
+---
+config:
+  fontSize: 22
+  sequence:
+    mirrorActors: false
+    actorMargin: 80
+    messageMargin: 20
+    boxMargin: 4
+---
+sequenceDiagram
+    participant A as クライアント A
+    participant S as サーバ
+    participant B as クライアント B
+    A<<->>S: open (v1)
+    S<<->>B: open (v1)
+    Note over A,B: それぞれキャッシュ上で編集
+    A->>S: close (v1)
+    Note over S: v1 = v1 → v2
+    S-->>A: Success
+    B->>S: close (v1)
+    Note over S: v1 ≠ v2
+    S-->>B: Failed (Conflict)
+    S<<->>B: open (v2)
